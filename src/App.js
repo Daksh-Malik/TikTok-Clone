@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import {useEffect, useState} from 'react';
+import Video from './components/Video';
 
 function App() {
+
+  const API_URL = 'https://raw.githubusercontent.com/codedamn-classrooms/tiktok-react-material/main/data.json';
+
+  const [content,setContent] = useState([]);
+
+  useEffect(()=>{
+    fetch(API_URL)
+    .then(data => data.json())
+    .then(data => {
+      setContent(data);
+    })
+  },[]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <div className='container'>
+        {content.map(item => {
+          return(
+              <Video 
+                url={item.url} 
+                channel={item.channel} 
+                desc={item.description} 
+                song={item.song} 
+                likes={item.likes} 
+                messages={item.messages}
+                shares={item.shares}
+              />
+            )
+        })}
+      </div>
     </div>
   );
 }
